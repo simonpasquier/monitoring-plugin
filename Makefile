@@ -59,7 +59,7 @@ start-backend:
 
 .PHONY: test-backend
 test-backend:
-	go test ./pkg/... -v
+	go test ./... -v
 
 .PHONY: test-frontend
 test-frontend:
