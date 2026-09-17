@@ -222,10 +222,10 @@ func TestRBAC_GetAlerts(t *testing.T) {
 		wantAlert bool
 	}{
 		{"UserA_NoPerms_NamespaceY", userA.Token, nsY, false},
-		{"UserA_NoPerms_NoNamespace", userA.Token, "", false},
+		{"UserA_NoPerms_AllNamespaces", userA.Token, "", false},
 		{"UserB_RulesView_NamespaceY", userB.Token, nsY, true},
 		{"UserB_RulesView_NamespaceZ", userB.Token, nsZ, false},
-		{"UserB_RulesView_NoNamespace", userB.Token, "", true},
+		{"UserB_RulesView_AllNamespaces", userB.Token, "", true},
 		{"UserC_ClusterAdmin_NamespaceY", f.BearerToken, nsY, true},
 	}
 
@@ -235,9 +235,11 @@ func TestRBAC_GetAlerts(t *testing.T) {
 			if err != nil {
 				t.Fatalf("GET /alerts request failed: %v", err)
 			}
+
 			if status != http.StatusOK {
 				t.Fatalf("Expected status %d, got %d", http.StatusOK, status)
 			}
+
 			got := containsAlert(alerts, alertName)
 			if got != tc.wantAlert {
 				t.Fatalf("Alert %s visibility: want %v, got %v (%d alerts returned)", alertName, tc.wantAlert, got, len(alerts))
